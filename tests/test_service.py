@@ -39,3 +39,9 @@ def test_api_fake_lifecycle_without_auth() -> None:
 
 def test_lan_settings_do_not_require_token() -> None:
     assert Settings(api_host="0.0.0.0").api_host == "0.0.0.0"
+
+
+def test_standard_franka_hand_transform_defaults() -> None:
+    settings = Settings()
+    assert settings.gripper_flange_translation_m == (0.0, 0.0, 0.1034)
+    assert settings.gripper_flange_quaternion_xyzw == (0.0, 0.0, 0.0, 1.0)

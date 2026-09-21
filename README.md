@@ -98,8 +98,8 @@ cp .env.example .env
 | `FRANKA_ROBOT_IP` | `172.16.0.2` | FR3 控制柜地址；部署配置仍应显式写出 |
 | `FRANKA_ROBOT_MODEL` | `fr3` | 机器人型号；服务启动时校验为 `fr3` |
 | `FRANKA_GRIPPER_ENABLED` | `true` | 是否启用末端 Franka Gripper 控制 |
-| `FRANKA_GRIPPER_FLANGE_TRANSLATION_M` | 无 | flange 到 gripper 的标定平移 `[x,y,z]`，单位 m |
-| `FRANKA_GRIPPER_FLANGE_QUATERNION_XYZW` | 无 | flange 到 gripper 的标定旋转，四元数顺序 xyzw |
+| `FRANKA_GRIPPER_FLANGE_TRANSLATION_M` | `[0,0,0.1034]` | 标准 Franka Hand 工厂安装时 flange 到 gripper 的平移，单位 m |
+| `FRANKA_GRIPPER_FLANGE_QUATERNION_XYZW` | `[0,0,0,1]` | 标准 Franka Hand 默认旋转，四元数顺序 xyzw |
 | `FRANKA_API_HOST` | `127.0.0.1` | API 监听地址；暴露到局域网需显式改为内网地址或 `0.0.0.0` |
 | `FRANKA_API_PORT` | `8000` | API 监听端口 |
 | `FRANKA_STATE_STALE_AFTER_MS` | `250` | 状态超过该时长未更新即标记为过期 |
@@ -158,7 +158,7 @@ T_base_gripper = T_base_flange · T_flange_gripper
 T_base_flange_target = T_base_gripper_target · inverse(T_flange_gripper)
 ```
 
-`T_flange_gripper` 必须描述“FR3 flange 坐标系到官方夹爪末端 frame”的变换，不能直接猜测或使用未经现场确认的默认值。平移使用 m，旋转使用 `quaternion_xyzw`；服务启动时校验四元数和变换的有限性。状态接口应同时返回 flange 和 gripper 位姿，便于验证变换方向。
+`T_flange_gripper` 描述“FR3 flange 坐标系到官方夹爪末端 frame”的变换。默认值适用于标准 Franka Hand 工厂安装：平移 `[0, 0, 0.1034]` m、旋转 `[0, 0, 0, 1]`；如果安装了转接件或使用其他工具 frame，必须覆盖为现场测量值。平移使用 m，旋转使用 `quaternion_xyzw`；服务启动时校验四元数和变换的有限性。状态接口应同时返回 flange 和 gripper 位姿，便于验证变换方向。
 
 ## 设计原则
 

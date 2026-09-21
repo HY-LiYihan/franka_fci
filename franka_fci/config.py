@@ -21,8 +21,9 @@ class Settings(BaseSettings):
     robot_ip: str = "172.16.0.2"
     robot_model: str = "fr3"
     gripper_enabled: bool = True
-    gripper_flange_translation_m: tuple[float, float, float] | None = None
-    gripper_flange_quaternion_xyzw: tuple[float, float, float, float] | None = None
+    # Standard Franka Hand, factory mounting, default gripper frame.
+    gripper_flange_translation_m: tuple[float, float, float] | None = (0.0, 0.0, 0.1034)
+    gripper_flange_quaternion_xyzw: tuple[float, float, float, float] | None = (0.0, 0.0, 0.0, 1.0)
 
     api_host: str = "127.0.0.1"
     api_port: int = Field(default=8000, ge=1, le=65535)
